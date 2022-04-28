@@ -4,7 +4,7 @@
 
 int main()
 {
-	int choice, x, y, retVal, a, b;
+	int choice, x, y, retVal, a, b, flag, spaces;
 	stackItem infix[10];
 	char postfix[10];
 	Stack postfixString = newStack();
@@ -12,19 +12,26 @@ int main()
 	
 	do
 	{
+		flag = 0;
+		
 		system("cls");
 		
 		printf("infix to postfix conversion\n");
 		printf("Infix String : ");
-		scanf("%s", &infix);
+		scanf(" %[^\n]s", &infix);
 		
 		//Infix to Postfix Conversion
 		for(x = 0, y = 0; infix[x]; x++)
 		{
+			if(infix[x] == ' ')
+			{
+				printf("\nCould not convert strings that contains space(s) in between.");
+				flag = 1;
+				break;
+			}
 			//operand, add it to the postfix string
-			if(isalnum(infix[x]))
+			else if(isalnum(infix[x]))
 				postfix[y++] = infix[x];	//	printf("alphanumeric");
-			
 			else
 			{
 				//operator
@@ -32,7 +39,7 @@ int main()
 				{
 			
 					//stack is empty
-					if(isEmpty(postfixString))	//	printf("pushed");	
+					if(isEmpty(postfixString)) 	//	printf("pushed");	
 						push(postfixString, infix[x]);
 						
 					//non-empty stack
@@ -65,28 +72,40 @@ int main()
 			pop(postfixString);
 		}
 		
-		postfix[y++] = '\0';
-		printf("Postfix String : %s", postfix);
+		if(flag != 1)
+		{
+			postfix[y++] = '\0';
+			printf("Postfix String : %s", postfix);
+		}
 		
 		//Postfix Evaluation
 		for(x = 0; postfix[x] != '\0'; x++)
 		{
 			//operand
-			if(isalnum(postfix[x]))
+			if(isdigit(postfix[x]))
 				push(evalPostfix, postfix[x] - '0');
+			else if(isalnum(postfix[x]) || postfix[x] == ' ')
+			{
+				printf("\nCould not evaluate strings that contains non-integer.");
+				flag = 1;
+				break;
+			}
 			else
 			{
 				//must have 2 or more operands
 				a = pop(evalPostfix);
 				b = pop(evalPostfix);
-				
+					
 				retVal = postfixEvaluation(b, a, postfix[x]);
 				push(evalPostfix, retVal);
 			}
 		}
-		
-		printf("\n\npostfix evaluation\n");
-		display(evalPostfix);
+
+		if(flag != 1)
+		{
+			printf("\n\npostfix evaluation\n");
+			display(evalPostfix);	
+		}
 		
 		freeStack(evalPostfix);
 		
