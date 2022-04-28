@@ -6,8 +6,7 @@ Sample Output if Applicatble
 infix to postfix conversion 
   Infix String : a+b*c-d 
   Postfix String : abc*+d-
- postfix evaluation
-  Result : (random value since string contains alphabet)
+  ```Could not evaluate strings that contains non-integer```
 
 infix to postfix conversion 
   Infix String : 1+2*3-4 
@@ -15,3 +14,8 @@ infix to postfix conversion
  postfix evaluation
   Result : 3
 ```
+
+Strings taht cannot be evaluated:
+- A-Z/a-z
+- spaces
+- newlines
